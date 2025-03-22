@@ -4,8 +4,8 @@ description: A basic prompt that uses the chat API to answer questions
 model:
     api: chat
     configuration:
-        type: openai
-        name: gpt-4o
+        type: azure_openai
+        azure_deployment: gpt-4o
     parameters:
         max_tokens: 128
         temperature: 0.2
