@@ -7,6 +7,10 @@ from pydantic import BaseModel, Field
 from dapr_agents.workflow import WorkflowApp, workflow, task
 from dapr_agents.types import DaprWorkflowContext
 
+# Azure AI Service用クライアント
+from dapr_agents import OpenAIChatClient
+import os
+
 # Load environment variables
 load_dotenv()
 
@@ -68,7 +72,17 @@ def synthesize_results(topic: str, research_results: List[str]) -> str:
 
 
 if __name__ == "__main__":
-    wfapp = WorkflowApp()
+    
+    # Azure AI ServiceのLLM設定
+    azure_llm = OpenAIChatClient(
+        api_key=os.getenv("AZURE_OPENAI_API_KEY"),
+        azure_endpoint=os.getenv("AZURE_OPENAI_ENDPOINT"),
+                azure_deployment = os.getenv("AZURE_OPENAI_CHAT_DEPLOYMENT_NAME"),
+        api_version = os.getenv("AZURE_OPENAI_API_VERSION")
+    )
+
+    # WorkflowへLLMを渡す
+    wfapp = WorkflowApp(llm=azure_llm)
 
     research_topic = "The environmental impact of quantum computing"
 
