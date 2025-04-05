@@ -3,12 +3,28 @@ from dotenv import load_dotenv
 import asyncio
 import logging
 
+# Azure AI Service用クライアント
+from dapr_agents import OpenAIChatClient
+import os
+
+
 async def main():
     try:
+
+        # Azure AI ServiceのLLM設定
+        azure_llm = OpenAIChatClient(
+            api_key=os.getenv("AZURE_OPENAI_API_KEY"),
+            azure_endpoint=os.getenv("AZURE_OPENAI_ENDPOINT"),
+                    azure_deployment = os.getenv("AZURE_OPENAI_CHAT_DEPLOYMENT_NAME"),
+            api_version = os.getenv("AZURE_OPENAI_API_VERSION")
+        )
+
+
         # Define Agent
         elf_agent = Agent(
             role="Elf",
             name="Legolas",
+            llm=azure_llm,
             goal="Act as a scout, marksman, and protector, using keen senses and deadly accuracy to ensure the success of the journey.",
             instructions=[
                 "Speak like Legolas, with grace, wisdom, and keen observation.",
